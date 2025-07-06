@@ -1,5 +1,6 @@
 import time
 import random
+import game_369
 
 drinkMax = 0  # name의 치사량
 name = ""  # 이름
@@ -14,7 +15,7 @@ ifContinue = ""     # 게임 지속 여부
 loseMember = ""    # 게임에서 진 사람
 
 def gameStart() :
-    global GameMembers, gameNum
+    global GameMembers, gameNum, loseMember, name, drinkNow
     startMember = random.choice(list(GameMembers.keys()))
     while True :
         try :
@@ -49,39 +50,22 @@ def gameStart() :
     time.sleep(1.0)
 
     if gameNum == 1 :
-        print("369게임 시작!")
-        ## 게임 함수 또는 코드 입력
+        players_list = []
+        for player_name in GameMembers:
+            players_list.append({
+                'name': player_name,
+                'limit': GameMembers[player_name],
+                'drinks': drinkNow[player_name]
+            })
 
+        loser_name = game_369.play_369_game(players_list, name)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        if loser_name:
+            loseMember = loser_name  
+            drinkNow[loseMember] += 1 
+            print(f"\n결과: {loseMember}님이 벌주 당첨! (현재 {drinkNow[loseMember]}잔)")
+        else:
+            print("\n결과: 이번 라운드는 무승부입니다!")
 
     elif gameNum == 2 :
         print("업다운 게임 시작!")
@@ -176,17 +160,18 @@ def gameStart() :
 
 def gameContinue() :
     global drunkFriend, ifContinue
-    for key, value in GameMembers.items():
-        print(f"{key}은(는) 지금까지 {drinkNow[key]}🍺! 치사량까지 {value - drinkNow[key]}")
+    for key in GameMembers.keys():
+        remaining_drinks = GameMembers[key] - drinkNow[key]
+        print(f"{key}은(는) 지금까지 {drinkNow[key]}🍺! 치사량까지 {remaining_drinks}잔 남음")
+        
+        # '현재 마신 양'이 '최대 주량'보다 크거나 같아지면 게임 종료
+        if drinkNow[key] >= GameMembers[key]:
+            drunkFriend = key  # 전사한 친구의 이름을 기록
+            break # 더 이상 확인할 필요 없으므로 반복문 탈출
 
     time.sleep(1.0)
 
-    if 0 in GameMembers.values() :
-        for key, value in GameMembers.items() :
-            if GameMembers[key] == 0 :
-                drunkFriend = key
-                break
-
+    if drunkFriend:
         print(f"""
         ________________________________________________________________________________________________________________
         ________________________________________________________________________________________________________________
@@ -208,6 +193,7 @@ def gameContinue() :
                                         🍺 다음에 술 마시면 또 불러주세요~ 안녕! 🍺
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         """)
+        return
 
     print("""
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -270,7 +256,7 @@ if q == "y" :
         except ValueError:
             print("숫자를 입력하세요.")
 
-    GameMembers[name] = drinkMax
+    GameMembers[name] = drinkMax * 2
     drinkNow[name] = 0
     time.sleep(1.0)
 
