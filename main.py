@@ -1,6 +1,7 @@
 import time
 import random
 import game_369
+import game_tofu
 
 drinkMax = 0  # name의 치사량
 name = ""  # 이름
