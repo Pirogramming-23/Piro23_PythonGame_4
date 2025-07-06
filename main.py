@@ -1,6 +1,7 @@
 import time
 import random
 import game_369
+import metro
 
 drinkMax = 0  # name의 치사량
 name = ""  # 이름
@@ -133,27 +134,10 @@ def gameStart() :
 
 
     elif gameNum == 5 :
-        print("지하철 게임 시작")
-        # 게임 코드 입력
+        participants = GameMembers.keys()
+        loseMember = metro.metroGame(participants, name)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        drinkNow[loseMember] += 1
 
     time.sleep(1.0)
     gameContinue()
