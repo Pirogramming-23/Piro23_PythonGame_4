@@ -98,7 +98,7 @@ def gameStart() :
                 'drinks': drinkNow[player_name]
             })
 
-        loser_name = game_tofu.tofuGame(players_list, startMember)
+        loser_name = game_tofu.tofuGame(players_list, name)
 
         if loser_name:
             loseMember = loser_name  
