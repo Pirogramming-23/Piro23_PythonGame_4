@@ -1,5 +1,6 @@
 import time 
 import random
+import re
 
 def create_rhythm_sequences():
     """딸기 게임용 리듬 시퀀스를 생성합니다."""
@@ -38,8 +39,30 @@ def get_mountain_pattern_indices():
     down = list(range(6, 0, -1))
     return up + down
 
+def clean_input(s):
+    """입력값에서 공백, 대소문자, 특수문자를 모두 제거합니다."""
+    return re.sub(r'[^\w가-힣]', '', s).lower()
+
 def execute_strawberry_game(player_data, main_player):
     """딸기 게임 메인 실행 함수"""
+    print(r'''
+                   ,----,                                                                                                                                                                        ,---,    ,---,  
+                 ,/   .`|                                                                                                                                             ____                    ,`--.' | ,`--.' |  
+  .--.--.      ,`   .'  :,-.----.      ,---,                  .---.    ,---,.     ,---,.,-.----.   ,-.----.                        ,----..      ,---,               ,'  , `.    ,---,.        |   :  : |   :  :  
+ /  /    '.  ;    ;     /\    /  \    '  .' \                /. ./|  ,'  .'  \  ,'  .' |\    /  \  \    /  \        ,---,         /   /   \    '  .' \           ,-+-,.' _ |  ,'  .' |        '   '  ; '   '  ;  
+|  :  /`. /.'___,/    ,' ;   :    \  /  ;    '.          .--'.  ' ;,---.' .' |,---.'   |;   :    \ ;   :    \      /_ ./|        |   :     :  /  ;    '.      ,-+-. ;   , ||,---.'   |        |   |  | |   |  |  
+;  |  |--` |    :     |  |   | .\ : :  :       \        /__./ \ : ||   |  |: ||   |   .'|   | .\ : |   | .\ :,---, |  ' :        .   |  ;. / :  :       \    ,--.'|'   |  ;||   |   .'        '   :  ; '   :  ;  
+|  :  ;_   ;    |.';  ;  .   : |: | :  |   /\   \   .--'.  '   \' .:   :  :  /:   :  |-,.   : |: | .   : |: /___/ \.  : |        .   ; /--`  :  |   /\   \  |   |  ,', |  '::   :  |-,        |   |  ' |   |  '  
+ \  \    `.`----'  |  |  |   |  \ : |  :  ' ;.   : /___/ \ |    ' ':   |    ; :   |  ;/||   |  \ : |   |  \ :.  \  \ ,' '        ;   | ;  __ |  :  ' ;.   : |   | /  | |  ||:   |  ;/|        '   :  | '   :  |  
+  `----.   \   '   :  ;  |   : .  / |  |  ;/  \   \;   \  \;      :|   :     \|   :   .'|   : .  / |   : .  / \  ;  `  ,'        |   : |.' .'|  |  ;/  \   \'   | :  | :  |,|   :   .'        ;   |  ; ;   |  ;  
+  __ \  \  |   |   |  '  ;   | |  \ '  :  | \  \ ,' \   ;  `      ||   |   . ||   |  |-,;   | |  \ ;   | |  \  \  \    '         .   | '_.' :'  :  | \  \ ,';   . |  ; |--' |   |  |-,        `---'. | `---'. |  
+ /  /`--'  /   '   :  |  |   | ;\  \|  |  '  '--'    .   \    .\  ;'   :  '; |'   :  ;/||   | ;\  \|   | ;\  \  '  \   |         '   ; : \  ||  |  '  '--'  |   : |  | ,    '   :  ;/|         `--..`;  `--..`;  
+'--'.     /    ;   |.'   :   ' | \. '|  :  :           \   \   ' \ ||   |  | ; |   |    \:   ' | \.':   ' | \'   \  ;  ;         '   | '/  .'|  :  :        |   : '  |/     |   |    \        .--,_    .--,_     
+  `--'---'     '---'     :   : :-'  |  | ,'            :   '  |--" |   :   /  |   :   .':   : :-'  :   : :-'      :  \  \        |   :    /  |  | ,'        ;   | |`-'      |   :   .'        |    |`. |    |`.  
+                         |   |.'    `--''               \   \ ;    |   | ,'   |   | ,'  |   |.'    |   |.'         \  ' ;         \   \ .'   `--''          |   ;/          |   | ,'          `-- -`, ;`-- -`, ; 
+                         `---'                           '---"     `----'     `----'    `---'      `---'            `--`           `---`                    '---'           `----'              '---`"   '---`"  
+                                                                                                                                                                                                                 
+''')
     print("\n=== 🍓 딸기 게임 시작! ===")
     print("딸기가 좋아~ 딸기가 좋아~ 딸기! 딸기! 딸기!딸기!딸기\n")
 
@@ -55,11 +78,15 @@ def execute_strawberry_game(player_data, main_player):
         pattern_idx = mountain_indices[current_round % mountain_length]
         active_player = player_data[turn_index % player_count]
         current_rhythm = rhythm_sequences[pattern_idx]
-        correct_answer = ''.join(current_rhythm).lower()
+        correct_answer = ''.join(current_rhythm)
+
+        # 안내 메시지
+        print(f" {active_player['name']}님의 차례!")
+        print("입력 예시: x x x 딸기 (띄어쓰기, 대소문자, 특수문자 상관없이 입력하세요!)")
 
         # 플레이어 입력 처리
         if active_player['name'] == main_player:
-            player_input = input(f"{active_player['name']}님 차례!! 정확한 박자에 딸기를 입력해주세요 (예: 1번 - X X X 딸기): ").replace(" ", "").lower()
+            player_input = input("> ")
         else:
             # AI 플레이어 행동 결정 (90% 정답률)
             ai_success_rate = random.random()
@@ -78,10 +105,14 @@ def execute_strawberry_game(player_data, main_player):
                 print(f"{active_player['name']}님 차례: {player_input}")
             time.sleep(1)
 
+        # 입력값 정제 후 비교
+        cleaned_input = clean_input(player_input)
+        cleaned_answer = clean_input(correct_answer)
+
         # 정답 체크
-        if player_input != correct_answer:
-            print("❌ 틀렸습니다! 정답은: ", end="")
-            display_rhythm_with_timing(current_rhythm)
+        if cleaned_input != cleaned_answer:
+            print(f"❌ 틀렸습니다!\n입력값: {player_input}\n정답:   {correct_answer}")
+            print("정답 리듬: ", end=""); display_rhythm_with_timing(current_rhythm)
             print(f"{active_player['name']} 님은 하나 더 마신다!")
             
             # 게임 재시작 여부 확인
@@ -95,7 +126,7 @@ def execute_strawberry_game(player_data, main_player):
                 print("🍺 딸기 게임 종료!")
                 return active_player['name']
         else:
-            print(f"{active_player['name']} 정답!\n")
+            print(f"정답! 🎉\n")
 
         current_round += 1
         turn_index += 1

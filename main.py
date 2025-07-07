@@ -5,6 +5,7 @@ import game_updown
 import game_tofu
 import game_strawberry
 
+
 drinkMax = 0  # name의 치사량
 name = ""  # 이름
 friends = {"은서": 2, "하연": 4, "연서": 8, "예진": 8, "헌도": 6}  # 함께 할 친구들 dict
