@@ -4,6 +4,8 @@ import game_369
 import game_updown
 import game_tofu
 
+import game_metro
+
 drinkMax = 0  # name의 치사량
 name = ""  # 이름
 friends = {"은서": 2, "하연": 4, "연서": 8, "예진": 8, "헌도": 6}  # 함께 할 친구들 dict
@@ -147,11 +149,23 @@ def gameStart() :
 
 
     elif gameNum == 5 :
-        participants = GameMembers.keys()
-        loseMember = metro.metroGame(participants, name)
+        players_list = []
+        for player_name in GameMembers:
+            players_list.append({
+                'name': player_name,
+                'limit': GameMembers[player_name],
+                'drinks': drinkNow[player_name]
+            })
 
-        drinkNow[loseMember] += 1
+        loser_name = game_metro.metroGame(players_list, name)
 
+        if loser_name:
+            loseMember = loser_name
+            drinkNow[loseMember] += 1
+            print(f"\n결과: {loseMember}님이 벌주 당첨! (현재 {drinkNow[loseMember]}잔)")
+        else:
+            print("\n결과: 이번 라운드는 무승부입니다!")
+            
     time.sleep(1.0)
     gameContinue()
 

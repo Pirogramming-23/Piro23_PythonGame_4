@@ -65,54 +65,88 @@ def updown_game(players_list, name):
     print(INTRO)
     print('⬆️ 이번에는 업다운 게임 ⬇️')
     print(f'{CYAN}==============================================={RESET}')
-    print('❗️ 기회는 5번 ❗️')
+    print('❗️ 기회는 모두 합쳐서 10번 ❗️')
     print('✅ 1 - 100사이의 숫자야') 
     print('🔺 업은 더 큰 숫자, 🔻 다운은 더 작은 숫자')
 
     number = random.randint(1, 100)
     count = 0
     current_player_index = 0
-    wrong_player = None  # 틀린 사람을 저장할 변수
+    wrong_player = None  # 틀린 사람 저장
 
-    while count < 5:
-            print(f'{CYAN}==============================================={RESET}')
-            
-            # 순서대로 플레이어 선택 한 번씩
+    while count < 10:
+            # 모든 플레이어가 순서대로 게임함
             current_player = players_list[current_player_index % len(players_list)]
-            print(f'\n 🙋🏻‍♀️ {current_player["name"]} 차례야!')
             
-            guess = int(input('🔢 숫자를 맞혀봐! ▶ '))
-            count += 1
-
-            if guess < number:
-                print(f'{RED}🔺 업! 더 큰 숫자라구{RESET}')
-                wrong_player = current_player 
-            elif guess > number:
-                print(f'{RED}🔻 다운! 더 작은 숫자야{RESET}')
-                wrong_player = current_player  # 틀린 사람 저장
-            else: 
-                print(f'{RED}==============================================={RESET}')
-                print(f'{GREEN}🎉 정답! 축하해~ 🎉{RESET}')
-                congrats_animation()
-                
-                return None 
-
-            print(f'💡 {YELLOW}{count}번째 시도야{RESET}')
-            current_player_index += 1
+            # 모든 차례에서 동일한 순서로 출력
+            print(f'{CYAN}==============================================={RESET}')
+            time.sleep(0.3)
+            print(f'💡 {YELLOW}{count + 1}번째 시도야{RESET}')
+            time.sleep(0.5)
+            print(f'\n👤 {current_player["name"]} 차례야!')
+            time.sleep(0.5)
             
-            if count >= 5:
+            # 내차례는 직접 입력, 다른 사람들은 자동
+            if current_player["name"] == name:
+                try:
+                    guess = int(input(f'🔢 숫자를 맞혀봐 ▶ '))
+                    count += 1
+
+                    # 정답 체크 (내 차례)
+                    if guess < number:
+                        print(f'{RED}🔺 업! 더 큰 숫자라구{RESET}')
+                        time.sleep(0.7)
+                    elif guess > number:
+                        print(f'{RED}🔻 다운! 더 작은 숫자야{RESET}')
+                        time.sleep(0.7)
+                    else: 
+                        print(f'{RED}==============================================={RESET}')
+                        print(f'{GREEN} {current_player["name"]} 정답이야! 🎉{RESET}')
+                        congrats_animation()
+                        
+                        return None 
+
+                    current_player_index += 1
+                except ValueError:
+                    print(f'{RED}❌ 숫자를 말해줘야해!{RESET}')
+                    time.sleep(0.5)
+                    continue
+            else:
+                # 다른 사람들은 한 번씩 처리 (자동 출력)
+                guess = random.randint(1, 100)
+                print(f'🔢 {current_player["name"]}: {guess}')
+                time.sleep(0.7)
+                count += 1
+
+                if guess < number:
+                    print(f'{RED}🔺 업! 더 큰 숫자라구{RESET}')
+                    time.sleep(0.7)
+                elif guess > number:
+                    print(f'{RED}🔻 다운! 더 작은 숫자야{RESET}')
+                    time.sleep(0.7)
+                else: 
+                    print(f'{RED}==============================================={RESET}')
+                    print(f'{GREEN} {current_player["name"]} 정답이야! 🎉{RESET}')
+                    congrats_animation()
+                    
+                    return None 
+
+                time.sleep(0.3)
+                current_player_index += 1
+            
+            if count >= 10:
                 break
 
     print(f'{CYAN}==============================================={RESET}')
-    print(f'{RED}💀 기회 끝 💀{RESET}')
+    print(f'{RED}💀 모두 틀려서 기회가 끝나버렸어 💀{RESET}')
     print(f"{GREEN}정답은 {number}!{RESET}")
     print(f'{RED}==============================================={RESET}')
     
-    if wrong_player:
-        print(f"{BOLD} 🍺 술이 들어간다 쭉쭉~쭉쭉 {wrong_player['name']} 원샷~! 🍺{RESET}")
-        drink_animation()
-        
-        return wrong_player["name"]
+    # 10번 기회가 끝나면 마지막에 게임을 진행한 사람이 틀린 사람
+    last_player = players_list[(current_player_index - 1) % len(players_list)]
+    print(f"{BOLD} 🍺 술이 들어간다 쭉쭉~쭉쭉 {last_player['name']} 원샷~! 🍺{RESET}")
+    drink_animation()
+    return last_player["name"]
 
 
 

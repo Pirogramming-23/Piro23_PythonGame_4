@@ -1,10 +1,6 @@
 import random
 import time
 
-selectedMetro = []
-usedMetro = []
-loser = ""
-
 metro1 = ['연천', '전곡', '청산', '소요산', '동두천', '보산', '동두천 중앙', '지행', '덕정', '덕계', '양주', '녹양', '가능', '의정부', '회룡',
           '망월사', '도봉산', '도봉', '방학', '창동', '녹천', '월계', '광운대', '석계', '신이문', '외대앞', '회기', '청량리', '제기동',
           '신설동', '동묘앞', '동대문', '종로5가', '종로3가', '종각', '시청', '서울역', '남영', '용산', '노량진', '대방', '신길', '영등포',
@@ -45,8 +41,13 @@ allMetro = [metro1, metro2, metro3, metro4, metro5, metro6, metro7, metro8, metr
 allMetroText = ["1호선", "2호선", "3호선", "4호선", "5호선", "6호선", "7호선", "8호선", "9호선"]
 
 
-def metroGame(participants, me) :
-    global selectedMetro, loser, usedMetro
+def metroGame(players, me) :
+    selectedMetro = []
+    usedMetro = []
+    loser = ""
+
+    participants = [player['name'] for player in players]
+
     print("🚇지~하철! 지하철! 지~하철! 지하철!🚇")
     time.sleep(1.0)
     while True :
@@ -72,20 +73,28 @@ def metroGame(participants, me) :
             break
 
     while True :
+        if set(usedMetro) >= set(selectedMetro):
+            print("지하철 역을 모두 말했어요! 무승부입니다~ 🎉🎊")
+            return None
+
         for i in participants :
             if i == me :
                 metroName = input(f"{i} : ")
+                time.sleep(1.0)
             else :
                 metroName = random.choice(selectedMetro+randomMetro)
                 print(f"{i} : {metroName}")
+                time.sleep(1.0)
 
             if metroName in usedMetro:
                 print(f"땡! {metroName}은(는) 이미 얘기한 역입니다~")
+                time.sleep(1.0)
                 print(f"누가 술을 마셔~ {i}(이)가 술을 마셔~")
                 loser = i
                 return loser
             elif metroName not in selectedMetro:
                 print(f"땡! {metroName}은(는) {allMetroText[m-1]} 안에 없습니다ㅜㅜ")
+                time.sleep(1.0)
                 print(f"누가 술을 마셔~ {i}(이)가 술을 마셔~")
                 loser = i
                 return loser
