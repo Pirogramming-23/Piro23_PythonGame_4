@@ -2,6 +2,7 @@ import time
 import random
 import game_369
 import game_updown
+import game_tofu
 
 drinkMax = 0  # name의 치사량
 name = ""  # 이름
@@ -87,8 +88,22 @@ def gameStart() :
             print("\n결과: 이번 라운드는 무승부입니다!")
             
     elif gameNum == 3 :
-        print("두부 게임 시작!")
-        #게임 코드 입력
+        players_list = []
+        for player_name in GameMembers:
+            players_list.append({
+                'name': player_name,
+                'limit': GameMembers[player_name],
+                'drinks': drinkNow[player_name]
+            })
+
+        loser_name = game_tofu.tofuGame(players_list, startMember)
+
+        if loser_name:
+            loseMember = loser_name  
+            drinkNow[loseMember] += 1 
+            print(f"\n결과: {loseMember}님이 벌주 당첨! (현재 {drinkNow[loseMember]}잔)")
+        else:
+            print("\n결과: 이번 라운드는 무승부입니다!")
 
 
 
