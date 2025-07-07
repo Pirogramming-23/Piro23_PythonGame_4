@@ -53,25 +53,29 @@ def tofuGame(players_list, start_name):
                 return names[current]
             
         else:
-            # 다음 입력: 플레이어 이름과 두부 수
-            startTime = time.time()
-            entry = input('>> (입력 예시: 홍길동 4) ').split()
-            endTime = time.time()
-            elapsed = endTime - startTime
+            while True:
+                # 다음 입력: 플레이어 이름과 두부 수
+                startTime = time.time()
+                entry = input('>> (입력 예시: 홍길동 4) ').split()
+                endTime = time.time()
+                elapsed = endTime - startTime
 
-            if elapsed > 3:
-                print('너무 늦게 말했습니다!')
-                return names[current]
+                # 예외 처리
+                try:
+                    if len(entry) != 2:
+                        print('형식에 맞게 입력해주세요: (이름) (숫자)')
+                        continue
+                    elif int(entry[1]) < 1 or int(entry[1]) > 5:
+                        print('1~5 사이의 숫자를 입력해주세요.')    
+                        continue    
+                        
+                except ValueError:
+                    print('두 번째 입력은 숫자여야 해요!')
+                    continue
 
-            if len(entry) != 2:
-                print('형식에 맞게 입력해주세요: (이름) (숫자)')
-                continue
-            try:
-                tofu = int(entry[1])
-                if tofu < 1 or tofu > 5:
-                    print('1~5 사이의 숫자를 입력해주세요.')    
-                    continue    
-            except ValueError:
-                print('두 번째 입력은 숫자여야 해요!')
-                continue
-
+                if elapsed > 5:
+                    print('너무 늦게 말했습니다!')
+                    return names[current]
+                else:
+                    tofu = int(entry[1])
+                    break
