@@ -4,7 +4,7 @@ import game_369
 import game_updown
 import game_tofu
 import game_strawberry
-
+import game_metro
 
 drinkMax = 0  # name의 치사량
 name = ""  # 이름
@@ -107,22 +107,6 @@ def gameStart() :
         else:
             print("\n결과: 이번 라운드는 무승부입니다!")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     elif gameNum == 4 :
         players_list = []
         for player_name in GameMembers:
@@ -140,29 +124,25 @@ def gameStart() :
             print(f"\n결과: {loseMember}님이 벌주 당첨! (현재 {drinkNow[loseMember]}잔)")
         else:
             print("\n결과: 이번 라운드는 무승부입니다!")
+
     elif gameNum == 5 :
-        print("지하철 게임 시작")
-        # 게임 코드 입력
+        players_list = []
+        for player_name in GameMembers:
+            players_list.append({
+                'name': player_name,
+                'limit': GameMembers[player_name],
+                'drinks': drinkNow[player_name]
+            })
 
+        loser_name = game_metro.metroGame(players_list, name)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        if loser_name:
+            loseMember = loser_name
+            drinkNow[loseMember] += 1
+            print(f"\n결과: {loseMember}님이 벌주 당첨! (현재 {drinkNow[loseMember]}잔)")
+        else:
+            print("\n결과: 이번 라운드는 무승부입니다!")
+            
     time.sleep(1.0)
     gameContinue()
 
