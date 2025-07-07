@@ -56,14 +56,16 @@ def tofuGame(players_list, start_name):
         if len(entry) != 2:
             print('형식에 맞게 입력해주세요: (이름) (숫자)')
             continue
-        if int(entry[1]) < 1 or int(entry[1]) > 5:
-            print('1~5 사이의 숫자를 입력해주세요.')
+        try:
+            player_name, tofu = entry[0], int(entry[1])
+            if tofu < 1 or tofu > 5:
+                print('1~5 사이의 숫자를 입력해주세요.')    
+                continue    
+        except ValueError:
+            print('두 번째 입력은 숫자여야 해요!')
             continue
-        player_name, tofu = entry[0], int(entry[1])
 
         # 잘못된 사람이 입력했을 경우 패배자 결정
         if player_name != names[current]:
             print(f"잘못된 사람이 말했어요!")
             return player_name
-
-        # 3초 안에 대답못하며 패배자 결정
