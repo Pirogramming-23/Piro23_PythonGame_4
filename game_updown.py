@@ -138,7 +138,7 @@ def updown_game(players_list, name):
                 break
 
     print(f'{CYAN}==============================================={RESET}')
-    print(f'{RED}💀 모두 틀려서 기회가 끝났어 💀{RESET}')
+    print(f'{RED}💀 모두 틀려서 기회가 끝나버렸어 💀{RESET}')
     print(f"{GREEN}정답은 {number}!{RESET}")
     print(f'{RED}==============================================={RESET}')
     
