@@ -65,7 +65,7 @@ def updown_game(players_list, name):
     print(INTRO)
     print('⬆️ 이번에는 업다운 게임 ⬇️')
     print(f'{CYAN}==============================================={RESET}')
-    print('❗️ 기회는 5번 ❗️')
+    print('❗️ 기회는 10번 ❗️')
     print('✅ 1 - 100사이의 숫자야') 
     print('🔺 업은 더 큰 숫자, 🔻 다운은 더 작은 숫자')
 
@@ -74,25 +74,30 @@ def updown_game(players_list, name):
     current_player_index = 0
     wrong_player = None  # 틀린 사람을 저장할 변수
 
-    while count < 5:
+    while count < 10:
             print(f'{CYAN}==============================================={RESET}')
             
-            # 순서대로 플레이어 선택 한 번씩
+            # 모든 플레이어가 순서대로 게임 
             current_player = players_list[current_player_index % len(players_list)]
-            print(f'\n 🙋🏻‍♀️ {current_player["name"]} 차례야!')
+            print(f'\n🙋🏻‍♀️ {current_player["name"]} 차례야!')
             
-            guess = int(input('🔢 숫자를 맞혀봐! ▶ '))
+            # 사용자는 직접 입력, 다른 사람들은 자동
+            if current_player["name"] == name:
+                guess = int(input(f'{current_player["name"]} 차례: 🔢 숫자를 맞혀봐! ▶ '))
+            else:
+                # 다른 사람들은 1-100 사이에서 랜덤하게 선택
+                guess = random.randint(1, 100)
+                print(f'{current_player["name"]} 차례: 🔢 나는... {guess}!')
+            
             count += 1
 
             if guess < number:
                 print(f'{RED}🔺 업! 더 큰 숫자라구{RESET}')
-                wrong_player = current_player 
             elif guess > number:
                 print(f'{RED}🔻 다운! 더 작은 숫자야{RESET}')
-                wrong_player = current_player  # 틀린 사람 저장
             else: 
                 print(f'{RED}==============================================={RESET}')
-                print(f'{GREEN}🎉 정답! 축하해~ 🎉{RESET}')
+                print(f'{GREEN}🎉 정답! {current_player["name"]} 맞았어! 🎉{RESET}')
                 congrats_animation()
                 
                 return None 
@@ -100,7 +105,7 @@ def updown_game(players_list, name):
             print(f'💡 {YELLOW}{count}번째 시도야{RESET}')
             current_player_index += 1
             
-            if count >= 5:
+            if count >= 10:
                 break
 
     print(f'{CYAN}==============================================={RESET}')
@@ -108,11 +113,11 @@ def updown_game(players_list, name):
     print(f"{GREEN}정답은 {number}!{RESET}")
     print(f'{RED}==============================================={RESET}')
     
-    if wrong_player:
-        print(f"{BOLD} 🍺 술이 들어간다 쭉쭉~쭉쭉 {wrong_player['name']} 원샷~! 🍺{RESET}")
-        drink_animation()
-        
-        return wrong_player["name"]
+    # 10번 기회가 끝나면 마지막에 게임을 진행한 사람이 틀린 사람
+    last_player = players_list[(current_player_index - 1) % len(players_list)]
+    print(f"{BOLD} 🍺 술이 들어간다 쭉쭉~쭉쭉 {last_player['name']} 원샷~! 🍺{RESET}")
+    drink_animation()
+    return last_player["name"]
 
 
 
