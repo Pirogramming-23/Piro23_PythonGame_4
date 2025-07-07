@@ -1,4 +1,5 @@
 import time
+import random
 
 def tofuGame(players_list, start_name):
     # players_list: list of dicts with keys 'name', 'limit', 'drinks'
@@ -17,7 +18,7 @@ def tofuGame(players_list, start_name):
         current = names.index(start_name)
     else:
         current = 0
-    print(f"시작은 {names[current]}! ({current+1}번째 사람)")
+    print(f"시작은 {names[current]}!")
 
     # 첫 두부 입력
     while True:
@@ -43,29 +44,34 @@ def tofuGame(players_list, start_name):
         else:
             current = (current - 2) % total
 
-        # 다음 입력: 플레이어 이름과 두부 수
-        startTime = time.time()
-        entry = input('>> (입력 예시: 홍길동 4) ').split()
-        endTime = time.time()
-        elapsed = endTime - startTime
+        if names[current] != start_name:
+            tofu = random.randint(1, 5)
+            time.sleep(2.0)
+            print(">> (입력 예시: 홍길동 4)", names[current], tofu)
+            if tofu == 3:
+                print("두부는 네모! 두부는 네모! 네모! 네모! 네모네모네모!!")
+                return names[current]
+            
+        else:
+            # 다음 입력: 플레이어 이름과 두부 수
+            startTime = time.time()
+            entry = input('>> (입력 예시: 홍길동 4) ').split()
+            endTime = time.time()
+            elapsed = endTime - startTime
 
-        if elapsed > 3:
-            print('너무 늦게 말했습니다!')
-            return names[current]
+            if elapsed > 3:
+                print('너무 늦게 말했습니다!')
+                return names[current]
 
-        if len(entry) != 2:
-            print('형식에 맞게 입력해주세요: (이름) (숫자)')
-            continue
-        try:
-            player_name, tofu = entry[0], int(entry[1])
-            if tofu < 1 or tofu > 5:
-                print('1~5 사이의 숫자를 입력해주세요.')    
-                continue    
-        except ValueError:
-            print('두 번째 입력은 숫자여야 해요!')
-            continue
+            if len(entry) != 2:
+                print('형식에 맞게 입력해주세요: (이름) (숫자)')
+                continue
+            try:
+                tofu = int(entry[1])
+                if tofu < 1 or tofu > 5:
+                    print('1~5 사이의 숫자를 입력해주세요.')    
+                    continue    
+            except ValueError:
+                print('두 번째 입력은 숫자여야 해요!')
+                continue
 
-        # 잘못된 사람이 입력했을 경우 패배자 결정
-        if player_name != names[current]:
-            print(f"잘못된 사람이 말했어요!")
-            return player_name
