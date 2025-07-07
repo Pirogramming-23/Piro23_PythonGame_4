@@ -4,8 +4,6 @@ import game_369
 import game_updown
 import game_tofu
 import game_strawberry
-
-
 import game_metro
 
 drinkMax = 0  # name의 치사량
@@ -109,22 +107,6 @@ def gameStart() :
         else:
             print("\n결과: 이번 라운드는 무승부입니다!")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     elif gameNum == 4 :
         players_list = []
         for player_name in GameMembers:
@@ -142,6 +124,7 @@ def gameStart() :
             print(f"\n결과: {loseMember}님이 벌주 당첨! (현재 {drinkNow[loseMember]}잔)")
         else:
             print("\n결과: 이번 라운드는 무승부입니다!")
+
     elif gameNum == 5 :
         players_list = []
         for player_name in GameMembers:
