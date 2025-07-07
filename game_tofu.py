@@ -8,7 +8,7 @@ def tofuGame(players_list, start_name):
     # 안내 멘트
     print(f"{' '.join(names)} 순으로 시계방향으로 앉아주세요.")
     time.sleep(1.0)
-    print("두부는 오른쪽으로 갈수록 증가합니다!")
+    print("두부는 본인 기준으로 오른쪽으로 갈수록 증가합니다!")
     time.sleep(1.0)
     print("두부두부두부 으쌰으쌰으쌰으쌰 두~부두부두부 으쌰으쌰으쌰으쌰")
 
@@ -44,15 +44,28 @@ def tofuGame(players_list, start_name):
             current = (current - 2) % total
 
         # 다음 입력: 플레이어 이름과 두부 수
+        startTime = time.time()
         entry = input('>> (입력 예시: 홍길동 4) ').split()
+        endTime = time.time()
+        elapsed = endTime - startTime
+
+        if elapsed > 3:
+            print('너무 늦게 말했습니다!')
+            return names[current]
+
         if len(entry) != 2:
             print('형식에 맞게 입력해주세요: (이름) (숫자)')
             continue
-        player_name, tofu = entry[0], int(entry[1])
+        try:
+            player_name, tofu = entry[0], int(entry[1])
+            if tofu < 1 or tofu > 5:
+                print('1~5 사이의 숫자를 입력해주세요.')    
+                continue    
+        except ValueError:
+            print('두 번째 입력은 숫자여야 해요!')
+            continue
 
         # 잘못된 사람이 입력했을 경우 패배자 결정
         if player_name != names[current]:
-            print(f"둘이 한잔해~ 둘이 한잔해~ {player_name}")
+            print(f"잘못된 사람이 말했어요!")
             return player_name
-
-        # 3초 안에 대답못하며 패배자 결정
